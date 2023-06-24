@@ -31,11 +31,14 @@ public class VendingMachine{
         String tempName;
         int tempPrice = 0;
         int tempStock = 0;
+        int tempCalorie = 0;
 
         System.out.println("Please enter Item name: ");
         tempName = input.nextLine();
         System.out.println("Please enter Item price: ");
         tempPrice = input.nextInt();
+        System.out.println("Please enter Item calorie: ");
+        tempCalorie = input.nextInt();
         while(tempStock < 10){
             System.out.println("Please enter Item stock: ");
             tempStock = input.nextInt();
@@ -44,7 +47,7 @@ public class VendingMachine{
             }
         }
 
-        Item newItem = new Item(tempName, tempPrice, tempStock);
+        Item newItem = new Item(tempName, tempPrice, tempCalorie, tempStock);
         
         int lowestIdx = -1;
         for(int i = 0; i < itemNum; i++){
@@ -64,10 +67,11 @@ public class VendingMachine{
     /**
      * Used to pre-program an item for the machine, Overloaded, one requires stock while the other does not
      * @param itemName adds the name to the item
-     * @param itemPrice add a price to the item
+     * @param itemPrice adds a price to the item
+     * @param itemCalorie adds the calorie to the item
      */
-    public void createItem(String itemName, int itemPrice){
-        Item newItem = new Item(itemName, itemPrice);
+    public void createItem(String itemName, int itemPrice, int itemCalorie){
+        Item newItem = new Item(itemName, itemPrice, itemCalorie);
         int lowestIdx = -1;
         for(int i = 0; i < itemNum; i++){
             if(this.items[i] == null){
@@ -83,10 +87,11 @@ public class VendingMachine{
      * Used to pre-program an item for the machine, Overloaded, one requires stock while the other does not
      * @param itemName adds a name to the item
      * @param itemPrice adds a price to the item
+     * @param itemCalorie adds the calorie to the item
      * @param itemStock adds a stock to the item **(Has nothing that checks for the minimum stock required, either to be recoded or as it is pre-programmed up to user discretion)**
      */
-    public void createItem(String itemName, int itemPrice, int itemStock){
-        Item newItem = new Item(itemName, itemPrice, itemStock);
+    public void createItem(String itemName, int itemPrice, int itemCalorie, int itemStock){
+        Item newItem = new Item(itemName, itemPrice, itemCalorie, itemStock);
         int lowestIdx = -1;
         for(int i = 0; i < itemNum; i++){
             if(this.items[i] == null){
@@ -127,7 +132,8 @@ public class VendingMachine{
     public void displayAllItems(){
         int i = 0;
         while(this.items[i] != null){
-            System.out.println("[" + i + "] " + this.items[i].getItemName() + " | " + this.items[i].getItemStock() + " pieces left.");
+            System.out.println("[" + i + "] " + this.items[i].getItemName() + " | " + this.items[i].getItemCalorie() + " Calorie(s)");
+            System.out.println(this.items[i].getItemStock() + " piece(s) left.");
             i++;
         }
     }
