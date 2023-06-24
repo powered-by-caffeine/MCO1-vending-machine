@@ -9,6 +9,8 @@ public class ChangeDispenser
     private Denomination fiftyPHP;
     private Denomination oneHundredPHP;
     private Denomination fiveHundredPHP;
+
+    private Denomination INVALID = new Denomination(-1, 0); //invalid denomination for error checking
     
     public ChangeDispenser(int commonStock)
     {
@@ -32,8 +34,14 @@ public class ChangeDispenser
         fiveHundredPHP = new Denomination (500, fiveHundredPHPStock);
     }
 
-    public ArrayList<Denomination> dispenseChange (int changeNeeded) //this function should not be called if the changeNeeded is 0
+    /**
+     * Method for dispensing the change in denominations. Before calling this method, please compute for the change needed first (Payment - item price). 
+     * @param changeNeeded the change needed. 
+     * @return an empty arraylist if there is insufficient change, otherwise returns the change in denominations
+     */
+    public ArrayList<Denomination> dispenseChange (int changeNeeded) 
     {
+        //NOTE: Do not call this method when
         ArrayList<Denomination> change = new ArrayList<>();
         int denominationsNeeded;
 
@@ -47,15 +55,6 @@ public class ChangeDispenser
             fivePHP,
             onePHP
         };
-
-
-        //TESTING ONLY: Print stock before transaction
-        System.out.println("Stock before change calculation:");
-        for (Denomination denomination : denominations)
-        {
-            System.out.println("Stock of " + denomination.getValue() + " : " + denomination.getStock());
-        }
-
 
         for (Denomination denomination : denominations)
         {
@@ -85,13 +84,6 @@ public class ChangeDispenser
 
             change.clear(); //the condition for whether the transaction is successful should check if change.isEmpty()
             //hence, this function should not be called if the changeNeeded is 0
-        }
-
-        //TESTING ONLY: Print stock after transaction
-        System.out.println("Stock after change calculation:");
-        for (Denomination denomination : denominations)
-        {
-            System.out.println("Stock of " + denomination.getValue() + " : " + denomination.getStock());
         }
         
         return change;
