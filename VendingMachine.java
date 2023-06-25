@@ -1,26 +1,20 @@
 import java.util.*;
+import java.util.ArrayList;
 
 public class VendingMachine{
     private String machineName;
     private int itemNum;
     //private ChangeDispenser change;
-    private Item[] items;
+    //private Item[] items;
+    private ArrayList<Item> items = new ArrayList<Item>();
 
     /**
      * Constructor for the Vending Machine
      * @param machineName This names the machine
      * @param itemNum This adds how many Items the machine holds, with the minimum of 8 **(Needs to be edited to be more user friendly)**
      */
-    public VendingMachine(String machineName, int itemNum){
+    public VendingMachine(String machineName){
         this.machineName = machineName;
-        if(itemNum < 8){
-            System.out.println("Number of items inputted is less than the minimum");
-            System.out.println("Defaulting to 8");
-            this.itemNum = 8;
-            items = new Item[itemNum];
-        }
-        this.itemNum = itemNum;
-        items = new Item[itemNum];
     }
 
     /**
@@ -49,19 +43,8 @@ public class VendingMachine{
 
         Item newItem = new Item(tempName, tempPrice, tempCalorie, tempStock);
         
-        int lowestIdx = -1;
-        for(int i = 0; i < itemNum; i++){
-            if(this.items[i] == null){
-                lowestIdx = i;
-                this.items[lowestIdx] = newItem;
-                System.out.println("Successfuly made an Item."); 
-                break;
-            }
-        }
-
-        if(lowestIdx == -1){
-            System.out.println("Vending Machine is already full of items.");
-        }
+        items.add(newItem);
+        System.out.println("Successfully made an Item.");
     }
 
     /**
@@ -72,15 +55,8 @@ public class VendingMachine{
      */
     public void createItem(String itemName, int itemPrice, int itemCalorie){
         Item newItem = new Item(itemName, itemPrice, itemCalorie);
-        int lowestIdx = -1;
-        for(int i = 0; i < itemNum; i++){
-            if(this.items[i] == null){
-                lowestIdx = i;
-                this.items[lowestIdx] = newItem;
-                System.out.println("Successfuly made an Item."); 
-                break;
-            }
-        }
+        items.add(newItem);
+        System.out.println("Succesfully made an Item.");
     }
 
     /**
@@ -92,15 +68,8 @@ public class VendingMachine{
      */
     public void createItem(String itemName, int itemPrice, int itemCalorie, int itemStock){
         Item newItem = new Item(itemName, itemPrice, itemCalorie, itemStock);
-        int lowestIdx = -1;
-        for(int i = 0; i < itemNum; i++){
-            if(this.items[i] == null){
-                lowestIdx = i;
-                this.items[lowestIdx] = newItem;
-                System.out.println("Successfuly made an Item."); 
-                break;
-            }
-        }
+        items.add(newItem);
+        System.out.println("Succesfully made an Item.");
     }
 
     /**
@@ -109,7 +78,7 @@ public class VendingMachine{
      * @param stockAmount the amount of stock to be added to the item 
      */
     public void stockItem(int Index, int stockAmount){
-        this.items[Index].StockItem(stockAmount);
+        items.get(Index).StockItem(stockAmount);
     }
 
     /**
@@ -118,22 +87,22 @@ public class VendingMachine{
      * **STILL NEEDS THE CODE FOR THE CHANGE**
      */
     public void dispenseItem(int index){
-        System.out.println("Dispensing " + items[index].getItemName());
-        items[index].dispenseItem();
+        System.out.println("Dispensing " + items.get(Index).getItemName());
+        iitems.get(Index).dispenseItem();
         /*
          * Enter Change here
          */
-        System.out.println("There are " +items[index].getItemStock() + " " + items[index].getItemName() + " left");
+        System.out.println("There are " +items.get(Index).getItemStock() + " " + items.get(Index).getItemName() + " left");
     }
 
     /**
      * Code used to print all the items that the machine has, used for menus for customers or to inform the machine creator what it has
      */
     public void displayAllItems(){
-        int i = 0;
-        while(this.items[i] != null){
-            System.out.println("[" + i + "] " + this.items[i].getItemName() + " | " + this.items[i].getItemCalorie() + " Calorie(s)");
-            System.out.println(this.items[i].getItemStock() + " piece(s) left.");
+        int i = 1;
+        while(i <= this.items.size){
+            System.out.println("[" + i + "] " + this.items.get(i).getItemName() + " | " + this.items.get(i).getItemCalorie() + " Calorie(s)");
+            System.out.println(this.items.get(i).getItemStock() + " piece(s) left.");
             i++;
         }
     }
