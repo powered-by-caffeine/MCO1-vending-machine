@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.*;
 
 public class ChangeDispenser 
 {
@@ -89,5 +90,74 @@ public class ChangeDispenser
         return change;
     }
     
+    public void StockChange(){
+        boolean done = false;
+        int menu = 0;
+        int stockNumber;
+        Scanner scanner = new Scanner(System.in);
 
+        
+        while(!done){
+            System.out.println("What do you want to restock?");
+            System.out.println("[1] 1 Peso");
+            System.out.println("[2] 5 Peso");
+            System.out.println("[3] 10 Peso");
+            System.out.println("[4] 20 Peso");
+            System.out.println("[5] 50 Peso");
+            System.out.println("[6] 100 Peso");
+            System.out.println("[7] 500 Peso");
+            System.out.println("[8] Exit");
+            menu = scanner.nextInt();
+            switch(menu){
+                case 1:
+                System.out.println("How many do you want to add.");
+                stockNumber = scanner.nextInt();
+                this.onePHP.addStock(stockNumber);
+                break;
+
+                case 2:
+                System.out.println("How many do you want to add.");
+                stockNumber = scanner.nextInt();
+                this.fivePHP.addStock(stockNumber);
+                break;
+
+                case 3:
+                System.out.println("How many do you want to add.");
+                stockNumber = scanner.nextInt();
+                this.tenPHP.addStock(stockNumber);
+                break;
+
+                case 4:
+                System.out.println("How many do you want to add.");
+                stockNumber = scanner.nextInt();
+                this.twentyPHP.addStock(stockNumber);
+                break;
+
+                case 5:
+                System.out.println("How many do you want to add.");
+                stockNumber = scanner.nextInt();
+                this.fiftyPHP.addStock(stockNumber);
+                break;
+
+                case 6:
+                System.out.println("How many do you want to add.");
+                stockNumber = scanner.nextInt();
+                this.oneHundredPHP.addStock(stockNumber);
+                break;
+
+                case 7:
+                System.out.println("How many do you want to add.");
+                stockNumber = scanner.nextInt();
+                this.fiveHundredPHP.addStock(stockNumber);
+                break;
+
+                case 8:
+                done = true;
+                break;
+
+            }
+        }
+
+        scanner.close();
+    }
 }
