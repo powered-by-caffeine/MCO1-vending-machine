@@ -5,7 +5,6 @@ public class VendingMachine{
     private String machineName;
     private int itemNum;
     //private ChangeDispenser change;
-    //private Item[] items;
     private ArrayList<Item> items = new ArrayList<Item>();
 
     /**
@@ -87,12 +86,12 @@ public class VendingMachine{
      * **STILL NEEDS THE CODE FOR THE CHANGE**
      */
     public void dispenseItem(int index){
-        System.out.println("Dispensing " + items.get(Index).getItemName());
-        iitems.get(Index).dispenseItem();
+        System.out.println("Dispensing " + items.get(index).getItemName());
+        items.get(index).dispenseItem();
         /*
          * Enter Change here
          */
-        System.out.println("There are " +items.get(Index).getItemStock() + " " + items.get(Index).getItemName() + " left");
+        System.out.println("There are " +items.get(index).getItemStock() + " " + items.get(index).getItemName() + " left");
     }
 
     /**
@@ -100,7 +99,7 @@ public class VendingMachine{
      */
     public void displayAllItems(){
         int i = 1;
-        while(i <= this.items.size){
+        while(i <= this.items.size()){
             System.out.println("[" + i + "] " + this.items.get(i).getItemName() + " | " + this.items.get(i).getItemCalorie() + " Calorie(s)");
             System.out.println(this.items.get(i).getItemStock() + " piece(s) left.");
             i++;
