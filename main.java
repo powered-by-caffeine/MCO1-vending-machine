@@ -78,9 +78,7 @@ public class main{
                         tempMachine.stockItem(tempItem, tempStock);
                     }
                     else if(menu == 2){
-                        /*
-                         * CHANGE HERE
-                         */
+                        tempMachine.stockChange();
                     }
                     else if(menu == 3){
                         tempMachine.displayAllItems();

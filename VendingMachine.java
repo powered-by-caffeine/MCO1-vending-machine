@@ -3,8 +3,7 @@ import java.util.ArrayList;
 
 public class VendingMachine{
     private String machineName;
-    private int itemNum;
-    //private ChangeDispenser change;
+    private ChangeDispenser change;
     private ArrayList<Item> items = new ArrayList<Item>();
 
     /**
@@ -14,6 +13,14 @@ public class VendingMachine{
      */
     public VendingMachine(String machineName){
         this.machineName = machineName;
+    }
+
+    /**
+     * Returns the machine name
+     * @return the name of the vending machine
+     */
+    public String getMachineName() {
+        return machineName;
     }
 
     /**
@@ -80,17 +87,28 @@ public class VendingMachine{
         items.get(Index).StockItem(stockAmount);
     }
 
+    public void stockChange(){
+        change.StockChange();
+    }
+
+    /**
+     * Returns the amount of items that the machine has
+     * @return number of items the machine currently has
+     */
+    public int getItemSize(){
+        return items.size();
+    }
     /**
      * Used to dispense the item.
      * @param index Requires index to locate the proper item
      * **STILL NEEDS THE CODE FOR THE CHANGE**
      */
-    public void dispenseItem(int index){
+    public void dispenseItem(int index, int moneyAmount){
         System.out.println("Dispensing " + items.get(index).getItemName());
-        items.get(index).dispenseItem();
         /*
-         * Enter Change here
+         * CHANGE HERE
          */
+        items.get(index).dispenseItem();
         System.out.println("There are " +items.get(index).getItemStock() + " " + items.get(index).getItemName() + " left");
     }
 
@@ -98,11 +116,12 @@ public class VendingMachine{
      * Code used to print all the items that the machine has, used for menus for customers or to inform the machine creator what it has
      */
     public void displayAllItems(){
-        int i = 1;
-        while(i <= this.items.size()){
+        int i = 0;
+        while(i < this.items.size()){
             System.out.println("[" + i + "] " + this.items.get(i).getItemName() + " | " + this.items.get(i).getItemCalorie() + " Calorie(s)");
             System.out.println(this.items.get(i).getItemStock() + " piece(s) left.");
             i++;
         }
     }
+
 }
