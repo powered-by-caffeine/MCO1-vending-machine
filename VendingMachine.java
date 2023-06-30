@@ -1,23 +1,53 @@
 import java.util.*;
-import java.util.ArrayList;
 
 public class VendingMachine{
     private String machineName;
-    private ChangeDispenser change;
+    private ChangeDispenser changeDispenser;
     private ArrayList<Item> items = new ArrayList<Item>();
+    private int paymentReserve = 0;
 
-<<<<<<< Updated upstream
-=======
+    private ArrayList<Item> startingInventory = new ArrayList<>();
+
+    
+
     final String SUCCESS_ITEM_ADD = "Item added successfully.";
 
->>>>>>> Stashed changes
     /**
-     * Constructor for the Vending Machine
+     * Default constructor for the vending machine. Creates a drink vending machine with preset, stocked items and a stocked change dispenser that has 10 of each denomination
+     */
+    public VendingMachine()
+    {
+        machineName = "Drink Vending Machine";
+        Item Coke = new Item("Coca-Cola", 43, 139, 10);
+        Item CokeZero = new Item("Coke Zero", 34, 0, 10);
+        Item Pepsi = new Item("Pepsi", 43, 150, 10);
+        Item Sprite = new Item("Sprite", 37, 146, 10);
+        Item Royal = new Item("Royal", 34, 76, 10);
+        Item MountainDew = new Item("Mountain Dew", 37, 170, 10);
+        Item Monster = new Item("Monster", 99, 101, 10);
+        Item RedBull = new Item("Red Bull", 86, 168, 10);
+
+        items.add(Coke);
+        items.add(CokeZero);
+        items.add(Pepsi);
+        items.add(Sprite);
+        items.add(Royal);
+        items.add(MountainDew);
+        items.add(Monster);
+        items.add(RedBull);
+
+
+        changeDispenser = new ChangeDispenser(10);
+    }
+
+
+    /**
+     * Constructor for the Vending Machine. The change dispenser for the vending machine has to be manually stocked
      * @param machineName This names the machine
-     * @param itemNum This adds how many Items the machine holds, with the minimum of 8 **(Needs to be edited to be more user friendly)**
      */
     public VendingMachine(String machineName){
         this.machineName = machineName;
+        changeDispenser = new ChangeDispenser(0);
     }
 
     /**
@@ -69,6 +99,7 @@ public class VendingMachine{
     public void createItem(String itemName, int itemPrice, int itemCalorie){
         Item newItem = new Item(itemName, itemPrice, itemCalorie);
         items.add(newItem);
+        startingInventory.add(newItem);
         System.out.println(SUCCESS_ITEM_ADD);
     }
 
@@ -82,16 +113,18 @@ public class VendingMachine{
     public void createItem(String itemName, int itemPrice, int itemCalorie, int itemStock){
         Item newItem = new Item(itemName, itemPrice, itemCalorie, itemStock);
         items.add(newItem);
+        startingInventory.add(newItem);
         System.out.println(SUCCESS_ITEM_ADD);
     }
 
     /**
-     * Used to add an existing item into the machine. Primarily used for adding presets
+     * Used to add an existing item into the machine. Primarily used for adding items
      * @param newItem an already existing item to be added into the list of items the machine currently holds
      */
     public void createItem(Item newItem)
     {
         items.add(newItem);
+        startingInventory.add(newItem);
         System.out.println(SUCCESS_ITEM_ADD);
     }
 
@@ -104,29 +137,64 @@ public class VendingMachine{
         items.get(Index).stockItem(stockAmount);
     }
 
+    
+
     public void stockChange(){
-        change.StockChange();
+        changeDispenser.StockChange();
     }
 
     /**
      * Returns the amount of items that the machine has
      * @return number of items the machine currently has
      */
-    public int getItemSize(){
+    public int getItemAmount(){
         return items.size();
     }
+
     /**
-     * Used to dispense the item.
-     * @param index Requires index to locate the proper item
-     * **STILL NEEDS THE CODE FOR THE CHANGE**
+     * Dispenses the item 
+     * @param index 
+     * @param moneyAmount the payment received by the machine
      */
     public void dispenseItem(int index, int moneyAmount){
-        System.out.println("Dispensing " + items.get(index).getItemName());
-        /*
-         * CHANGE HERE
-         */
-        items.get(index).dispenseItem();
-        System.out.println("There are " +items.get(index).getItemStock() + " " + items.get(index).getItemName() + " left");
+        ArrayList<Denomination> change = new ArrayList<>();
+
+        if (moneyAmount < items.get(index).getItemPrice()) //payment is less than the item price
+        {
+            System.out.println("Transaction failed.Payment received is less than the item price.");
+        }
+        else if (moneyAmount == items.get(index).getItemPrice()) //payment is equal to the item price
+        {
+            System.out.println("Dispensing " + items.get(index).getItemName() + "...");
+            items.get(index).dispenseItem();
+            System.out.println(items.get(index).getItemStock() + " stock remaining for item named: " + items.get(index).getItemName());
+        }
+        else //payment requires change
+        {
+            change = changeDispenser.dispenseChange(moneyAmount - items.get(index).getItemPrice());
+
+            if (change.isEmpty()) //change is empty if change dispenser does not have enough change stock
+            {
+                System.out.println("Transaction failed. Not enough change to dispense.");
+            }
+            else
+            {
+                //Collect payment
+                addPayment(moneyAmount - items.get(index).getItemPrice());
+
+                // Dispense Item
+                System.out.println("Dispensing " + items.get(index).getItemName() + "...");
+                items.get(index).dispenseItem();
+                System.out.println(items.get(index).getItemStock() + " stock remaining for item named: " + items.get(index).getItemName());
+
+                // Dispense change
+                System.out.println("Dispensing change:");
+                for (Denomination denomination : change)
+                {
+                    System.out.println("Dispensing " + denomination.getValue() + " PHP...");
+                }
+            }
+        }
     }
 
     /**
@@ -141,4 +209,48 @@ public class VendingMachine{
         }
     }
 
+    /**
+     * Adds the received payment to the payment reserve
+     * @param paymentReceived payment received by the machine from last transaction
+     */
+    public void addPayment(int paymentReceived)
+    {
+        paymentReserve += paymentReceived;
+    }
+
+    /**
+     * Collects the payments received by the machine and resets the payment reserve.
+     * @return the payments received by the machine since last collection
+     */
+    public int collectPayment()
+    {
+        int paymentsReceived = paymentReserve;
+
+        paymentReserve = 0; //resets payment reserve
+
+        return paymentsReceived;
+    }
+
+    /**
+     * gets the payments received by the machine
+     * @return
+     */
+    public int getPaymentReserve() {
+        return paymentReserve;
+    }
+
+    /**
+     * gets the starting inventory since last reset
+     */
+    public ArrayList<Item> getStartingInventory() {
+        return startingInventory;
+    }
+
+    public void updateStartingInventory(Item newItem) {
+        startingInventory.add(newItem);
+    }
+
+    public void resetStartingInventory() {
+        startingInventory.clear();
+    }
 }

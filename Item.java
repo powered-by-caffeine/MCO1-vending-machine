@@ -1,6 +1,7 @@
 public class Item {
     private String itemName;
     private int itemPrice;
+    
     private int itemStock;
     private int itemCalorie;
 
@@ -58,6 +59,14 @@ public class Item {
     }
 
     /**
+     * gets the item price
+     * @return the item price
+     */
+    public int getItemPrice() {
+        return itemPrice;
+    }
+
+    /**
      * gets the item stock
      * @return the item stock
      */
@@ -76,9 +85,7 @@ public class Item {
      * Subtracts 1 from item stock as it dispenses it
      * @return the amount it has left after it dispense
      */
-    public int dispenseItem(){
+    public void dispenseItem(){
         this.itemStock-=1;
-
-        return this.itemStock;
     }
 }

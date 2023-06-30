@@ -10,8 +10,6 @@ public class ChangeDispenser
     private Denomination fiftyPHP;
     private Denomination oneHundredPHP;
     private Denomination fiveHundredPHP;
-
-    private Denomination INVALID = new Denomination(-1, 0); //invalid denomination for error checking
     
     public ChangeDispenser(int commonStock)
     {
@@ -37,12 +35,12 @@ public class ChangeDispenser
 
     /**
      * Method for dispensing the change in denominations. Before calling this method, please compute for the change needed first (Payment - item price). 
-     * @param changeNeeded the change needed. 
+     * @param changeNeeded the change needed. Must be a positive, nonzero integer
      * @return an empty arraylist if there is insufficient change, otherwise returns the change in denominations
      */
     public ArrayList<Denomination> dispenseChange (int changeNeeded) 
     {
-        //NOTE: Do not call this method when
+        //NOTE: Do not call this method when changeNeeded = 0
         ArrayList<Denomination> change = new ArrayList<>();
         int denominationsNeeded;
 
@@ -155,8 +153,12 @@ public class ChangeDispenser
                 done = true;
                 break;
 
+                default:
+                System.out.println("Invalid input. Please try again.");   
+                break;
             }
         }
 
+        scanner.close();
     }
 }

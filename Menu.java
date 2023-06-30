@@ -18,9 +18,11 @@ public class Menu
 
     VendingMachine currentMachine;
 
-
     Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Displays a divider for better readability in terminal
+     */
     private void displayDivider()
     {
         for (int i = 0; i < DIVIDER_LENGTH; i++)
@@ -31,12 +33,16 @@ public class Menu
         System.out.println();
     }
 
+    /**
+     * creates items for the vending machine using presets
+     */
     private void createPresets()
     {
         ArrayList<Item> presets = new ArrayList<>();
 
         //PRESETS GO HERE
         Item Coke = new Item("Coca-Cola", 43, 139);
+        Item CokeZero = new Item("Coke Zero", 34, 0);
         Item Pepsi = new Item("Pepsi", 43, 150);
         Item Sprite = new Item("Sprite", 37, 146);
         Item Royal = new Item("Royal", 34, 76);
@@ -51,6 +57,7 @@ public class Menu
 
         //ADD PRESETS HERE
         presets.add(Coke);
+        presets.add(CokeZero);
         presets.add(Pepsi);
         presets.add(Sprite);
         presets.add(Royal);
@@ -65,16 +72,15 @@ public class Menu
 
         int i = 0;
         int choice;
-        Boolean found = true;
 
         Item newItem;
+        int newStock;
 
         //displays all of the presets available
         displayDivider();
         for (Item item : presets)
         {
             System.out.println("[" + i + "] " + item.getItemName() + " | " + item.getItemCalorie() + " Calorie(s)");
-            System.out.println(item.getItemStock() + " piece(s) left.");
             i++;
         }
         System.out.println();
@@ -87,86 +93,124 @@ public class Menu
 
             if (-1 < choice && choice < presets.size())
             {
-                newItem = presets.get(i);
+                newItem = presets.get(choice);
 
                 while (true)
                 {
-                    System.out.println("How much do you want to stock? (0-15): ");
-                    newItem.stockItem(scanner.nextInt()); 
+                    System.out.println("How much do you want to stock? (10-15): ");
+                    newStock = scanner.nextInt();
+                  
+                    if (newItem.stockItem(newStock) == true)
+                    {
+                        currentMachine.createItem(newItem);
+                        currentMachine.updateStartingInventory(newItem);
 
-                    
+                        System.out.println(SUCCESS_STOCK);
+                        break;
+                    }
                 }
+
+                break;
             }
             else
             {
                 System.out.println("Item not found. Try again.");
             }
         }
-
-        while(true)
-        {
-            
-        }
-        
-
     }
 
+    /**
+     * Creates a regular vending machine
+     */
     private void createRegularVendingMachine()
     {
         int input = 0;
 
         scanner.nextLine(); //consumes the newline character leftover from last nextInt() call
 
-        System.out.print("Enter machine name: ");
-        currentMachine = new VendingMachine(scanner.nextLine()); //assigns user input as machine name
+        displayDivider();
+        System.out.println("What do you want to do?");
+        System.out.println("[1] Create Preset Vending Machine (Drink Vending Machine)");
+        System.out.println("[2] Create Vending Machine Manually");
+        System.out.println("[3] Exit");
+        System.out.println();
+        System.out.print("Input: ");
 
-        while (true) 
+        switch(scanner.nextInt())
         {
-            displayDivider();
-            System.out.println("Current items in vending machine: ");
-            currentMachine.displayAllItems(); //gives visual feedback on how many items there are
-            System.out.println();
-            System.out.println(MIN_ITEMS + " - " + MAX_ITEMS + " items need to be created for the Vending Machine to dispense.");
-            System.out.println("[1] Create Item Manually");
-            System.out.println("[2] Create Item using Preset");
-            System.out.println("[3] Exit");
-            System.out.println();
-            System.out.print("Input: ");
+            case 1:
+                currentMachine = new VendingMachine();
+                System.out.println("Successfully created vending machine!");
+                break;
+            
+            case 2:
+                scanner.nextLine();
 
-            input = scanner.nextInt();
+                System.out.print("Enter machine name: ");
+                currentMachine = new VendingMachine(scanner.nextLine()); //assigns user input as machine name
 
-            if (currentMachine.getItemAmount() == MAX_ITEMS)
-            {
-                break; //ends loop when item limit is reached
-            }
-            else if (input == 1)
-            {
-                currentMachine.createItem();
-            }
-            else if (input == 2)
-            {
-                createPresets();
-            }
-            else if (input == 3)
-            {
-                if (currentMachine.getItemAmount() >= 8)
-                {
-                    break; //ends loop
-                }
-                else
+                while (true) 
                 {
                     displayDivider();
-                    System.out.println("Vending Machine has less than 8 items.");
-                }
-            }         
-            else
-            {
+                    System.out.println("Current items in vending machine: ");
+                    currentMachine.displayAllItems(); //gives visual feedback on how many items there are
+                    System.out.println();
+                    System.out.println(MIN_ITEMS + " - " + MAX_ITEMS + " items need to be created for the Vending Machine to dispense.");
+                    System.out.println("[1] Create Item Manually");
+                    System.out.println("[2] Create Item using Preset");
+                    System.out.println("[3] Exit");
+                    System.out.println();
+                    System.out.print("Input: ");
+
+                    input = scanner.nextInt();
+
+                    if (currentMachine.getItemAmount() == MAX_ITEMS)
+                    {
+                        break; //ends loop when item limit is reached
+                    }
+                    else if (input == 1)
+                    {
+                        currentMachine.createItem();
+                    }
+                    else if (input == 2)
+                    {
+                        createPresets();
+                    }
+                    else if (input == 3)
+                    {
+                        if (currentMachine.getItemAmount() >= 8)
+                        {
+                            break; //ends loop
+                        }
+                        else
+                        {
+                            displayDivider();
+                            System.out.println("Vending Machine has less than 8 items.");
+                        }
+                    }         
+                    else
+                    {
+                        System.out.println(INPUT_ERROR);
+                    }
+                    
+                }        
+                break;
+
+            case 3:
+                break;
+
+            default:
                 System.out.println(INPUT_ERROR);
-            }
-            
+                break;
         }
+
+
+        
     }
 
+    /**
+     * Creates a vending machine based on user preference
+     */
     private void createVendingMachine()
     {
         int input = 0;
@@ -205,11 +249,16 @@ public class Menu
         }
     }
 
+    /**
+     * tests the newest vending machine created
+     */
     private void testVendingMachine()
     {
-        int input = 0;
+        int tempItem = 0, tempMoney = 0;
 
-        int tempItem = 0, tempStock = 0, tempMoney = 0;
+        ArrayList<Integer> denominations = new ArrayList<>();
+
+        int payment = 0;
         
         if (currentMachine == null)
         {
@@ -219,22 +268,90 @@ public class Menu
         else
         {
             displayDivider();
-            System.out.println("Testing the newest Machine created: " + currentMachine.getMachineName());
 
-            while (input != 4)
+            // Accept Payment in denominations
+            while(true)
+            {
+                System.out.println("Keep entering the denominations you wish to insert into the machine. Enter 0 to finish entering denominations.");
+                System.out.print("Input: ");
+                tempMoney = scanner.nextInt();   
+                
+                if (tempMoney == 5 || tempMoney == 10 || tempMoney == 20 || tempMoney == 50 || tempMoney == 100 || tempMoney == 500)
+                {
+                    denominations.add(tempMoney); //for keeping track of what user inserted in case they cancel purchase
+                    payment += tempMoney;
+                }
+                else if (tempMoney == 0)
+                {
+                    break;
+                }
+                else
+                {
+                    System.out.println("Invalid denomination. Try again.");
+                }
+            }
+
+            // Choose the item to purchase
+            System.out.println("Enter the number of the item you wish to purchase. To cancel your purchase, input -1.");
+            currentMachine.displayAllItems();
+            System.out.println();
+            System.out.print("Input: ");
+            tempItem = scanner.nextInt();
+
+            if (tempItem == -1) //user cancels
+            {
+                System.out.println("Dispensing your change: ");
+                for (int denomination : denominations)
+                {
+                    System.out.println("Dispensing " + denomination + " PHP...");
+                }
+            }
+            else
+            {
+                currentMachine.dispenseItem(tempItem, payment);
+            }
+                
+        }
+        
+    }
+
+    /**
+     * Performs maintenance on the current vending machine
+     */
+    private void maintainVendingMachine()
+    {
+        int input = 0;
+
+        int tempItem = 0, tempStock = 0;
+
+        if (currentMachine == null)
+        {
+            displayDivider();
+            System.out.println("Please create a vending machine first.");
+        }
+        else
+        {
+            displayDivider();
+            System.out.println("Performing maintenance on newest machine created: " + currentMachine.getMachineName());   
+
+            while (input != 5)
             {
                 System.out.println("What do you want to do?");
                 System.out.println();
                 System.out.println("[1] Restock Items");
                 System.out.println("[2] Restock Change");
-                System.out.println("[3] Use Vending Machine");
-                System.out.println("[4] Exit");
+                System.out.println("[3] Print Transaction Summary");
+                System.out.println("[4] Collect Payment");
+                System.out.println("[5] Exit");
                 System.out.println();
                 System.out.print("Input: ");
+
+                input = scanner.nextInt();
 
                 switch (input)
                 {
                     case 1:
+                        displayDivider();
                         System.out.println("Which item do you want to restock?");
                         currentMachine.displayAllItems();
                         System.out.println();
@@ -252,34 +369,43 @@ public class Menu
                         break;
                     
                     case 2:
+                        displayDivider();
                         currentMachine.stockChange();
                         break;
                     
                     case 3:
-                        System.out.println("Which item do you want to purchase?");
+                        int i = 0;
+
+                        System.out.println("Starting Inventory since last restocking: ");
+                        for (Item item : currentMachine.getStartingInventory())
+                        {
+                            System.out.println("[" + i + "] " + item.getItemName() + " | " + item.getItemCalorie() + " Calorie(s) | Stock: " + item.getItemStock());
+                            i++;
+                        }
+
+                        System.out.println("Ending Inventory since last restocking: ");
                         currentMachine.displayAllItems();
-                        System.out.println();
-                        System.out.print("Input: ");
-                        tempItem = scanner.nextInt();
-                        System.out.println();
 
-                        System.out.println("Enter the amount of money you wish to insert into the machine.");
-                        System.out.print("Input: ");
-                        tempMoney = scanner.nextInt();
-
-                        currentMachine.dispenseItem(tempItem, tempMoney);
                         break;
-                    
-                    case 4: //Exit
+
+                    case 4:
+                        displayDivider();
+                        int paymentsReceived = currentMachine.collectPayment();
+
+                        System.out.println(paymentsReceived + " amount collected from sales.");
+                        break;
+
+                    case 5: //exit
                         break;
 
                     default:
                         System.out.println(INPUT_ERROR);
-                        break;
+                    
                 }
-            }       
+            }
         }
         
+
     }
 
     public void mainMenu()
@@ -294,7 +420,8 @@ public class Menu
             System.out.println();
             System.out.println("[1] Create a Vending Machine");
             System.out.println("[2] Test a Vending Machine");
-            System.out.println("[3] Exit");   
+            System.out.println("[3] Maintain a Vending Machine");
+            System.out.println("[4] Exit");   
             System.out.println();
             System.out.print("Input: ");
 
@@ -309,9 +436,13 @@ public class Menu
                 case 2:
                     testVendingMachine();
                     break;
-
+                
                 case 3:
-                displayDivider();
+                    maintainVendingMachine();
+                    break;
+
+                case 4:
+                    displayDivider();
                     System.out.println(PROGRAM_EXIT);
                     programEnded = true;
                     break;
