@@ -130,6 +130,7 @@ public class Menu
 
         displayDivider();
         System.out.println("What do you want to do?");
+        System.out.println();
         System.out.println("[1] Create Preset Vending Machine (Drink Vending Machine)");
         System.out.println("[2] Create Vending Machine Manually");
         System.out.println("[3] Exit");
@@ -140,6 +141,8 @@ public class Menu
         {
             case 1:
                 currentMachine = new VendingMachine();
+
+                displayDivider();
                 System.out.println("Successfully created vending machine!");
                 break;
             
@@ -253,6 +256,8 @@ public class Menu
      */
     private void testVendingMachine()
     {
+        int input = 0;
+
         int tempItem = 0, tempMoney = 0;
 
         ArrayList<Integer> denominations = new ArrayList<>();
@@ -266,56 +271,86 @@ public class Menu
         }
         else
         {
-            displayDivider();
-
-            // Accept Payment in denominations
-            while(true)
+            while (input != 3)
             {
-                System.out.println("Keep entering the denominations you wish to insert into the machine. Enter 0 to finish entering denominations.");
+                displayDivider();
+                System.out.println("What do you want to do?");
+                System.out.println("[1] Test the Vending Features");
+                System.out.println("[2] Test the Maintenance Features");
+                System.out.println("[3] Exit");
+                System.out.println();
                 System.out.print("Input: ");
-                tempMoney = scanner.nextInt();   
-                
-                if (tempMoney == 5 || tempMoney == 10 || tempMoney == 20 || tempMoney == 50 || tempMoney == 100 || tempMoney == 500)
-                {
-                    denominations.add(tempMoney); //for keeping track of what user inserted in case they cancel purchase
-                    payment += tempMoney;
-                }
-                else if (tempMoney == 0)
-                {
-                    break;
-                }
-                else
-                {
-                    System.out.println("Invalid denomination. Try again.");
-                }
-            }
 
-            // Choose the item to purchase
-            System.out.println("Enter the number of the item you wish to purchase. To cancel your purchase, input -1.");
-            currentMachine.displayAllItems();
-            System.out.println();
-            System.out.print("Input: ");
-            tempItem = scanner.nextInt();
+                input = scanner.nextInt();
 
-            if (tempItem == -1) //user cancels
-            {
-                System.out.println("Dispensing your change: ");
-                for (int denomination : denominations)
+                switch (input)
                 {
-                    System.out.println("Dispensing " + denomination + " PHP...");
-                }
+                    case 1:
+                        // Accept Payment in denominations
+                        while(true)
+                        {
+                            displayDivider();
+                            System.out.println("Keep entering the denominations you wish to insert into the machine. Enter 0 to finish entering denominations.");
+                            System.out.print("Input: ");
+                            tempMoney = scanner.nextInt();   
+                            
+                            if (tempMoney == 5 || tempMoney == 10 || tempMoney == 20 || tempMoney == 50 || tempMoney == 100 || tempMoney == 500)
+                            {
+                                denominations.add(tempMoney); //for keeping track of what user inserted in case they cancel purchase
+                                payment += tempMoney;
+                            }
+                            else if (tempMoney == 0)
+                            {
+                                break;
+                            }
+                            else
+                            {
+                                System.out.println("Invalid denomination. Try again.");
+                            }
+                        }
+
+                        // Choose the item to purchase
+                        System.out.println("Enter the number of the item you wish to purchase. To cancel your purchase, input -1.");
+                        currentMachine.displayAllItems();
+                        System.out.println();
+                        System.out.print("Input: ");
+                        tempItem = scanner.nextInt();
+
+                        if (tempItem == -1) //user cancels
+                        {
+                            System.out.println("Dispensing your change: ");
+                            for (int denomination : denominations)
+                            {
+                                System.out.println("Dispensing " + denomination + " PHP...");
+                            }
+                        }
+                        else
+                        {
+                            if (currentMachine.dispenseItem(tempItem, payment) == false)
+                            {
+                                System.out.println("Dispensing your change: ");
+                                for (int denomination : denominations)
+                                {
+                                    System.out.println("Dispensing " + denomination + " PHP...");
+                                }    
+                            }
+                        } 
+                        break;
+
+                    case 2:
+                        maintainVendingMachine();
+                        break;
+
+                    case 3:
+                        break;
+
+                    default:
+                        System.out.println(INPUT_ERROR);
+                }    
             }
-            else
-            {
-                if (currentMachine.dispenseItem(tempItem, payment) == false)
-                {
-                    System.out.println("Dispensing your change: ");
-                    for (int denomination : denominations)
-                    {
-                        System.out.println("Dispensing " + denomination + " PHP...");
-                    }    
-                }
-            }
+            
+
+            
                 
         }
         
@@ -459,8 +494,7 @@ public class Menu
             System.out.println();
             System.out.println("[1] Create a Vending Machine");
             System.out.println("[2] Test a Vending Machine");
-            System.out.println("[3] Maintain a Vending Machine");
-            System.out.println("[4] Exit");   
+            System.out.println("[3] Exit");   
             System.out.println();
             System.out.print("Input: ");
 
@@ -475,12 +509,8 @@ public class Menu
                 case 2:
                     testVendingMachine();
                     break;
-                
-                case 3:
-                    maintainVendingMachine();
-                    break;
 
-                case 4:
+                case 3:
                     displayDivider();
                     System.out.println(PROGRAM_EXIT);
                     programEnded = true;

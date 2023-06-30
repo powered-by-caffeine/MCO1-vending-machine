@@ -92,7 +92,6 @@ public class VendingMachine{
         items.add(newItem);
         System.out.println(SUCCESS_ITEM_ADD);
 
-        input.close();
     }
 
     /**
