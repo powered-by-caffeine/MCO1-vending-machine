@@ -14,6 +14,10 @@ public class main{
         return temp;
     }
     public static void main(String[] args){
+        Menu test = new Menu();
+
+        test.mainMenu();
+
         ArrayList<VendingMachine> machine = new ArrayList<VendingMachine>();
         VendingMachine tempMachine;
         String tempName;
@@ -51,7 +55,7 @@ public class main{
                     }
 
                     else if(menu == 3)
-                    if(tempMachine.getItemSize() >= 8)
+                    if(tempMachine.getItemAmount() >= 8)
                     break;
                     else
                     System.out.println("Vending Machine has less than 8 items.");
@@ -99,5 +103,9 @@ public class main{
                 break;
             }
         }
+
+        input.close(); 
     }
+
+   
 }

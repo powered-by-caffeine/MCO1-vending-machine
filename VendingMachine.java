@@ -95,7 +95,7 @@ public class VendingMachine{
      * Returns the amount of items that the machine has
      * @return number of items the machine currently has
      */
-    public int getItemSize(){
+    public int getItemAmount(){
         return items.size();
     }
     /**
