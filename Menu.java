@@ -200,7 +200,6 @@ public class Menu
                 break;
 
             default:
-                System.out.println(INPUT_ERROR);
                 break;
         }
 
@@ -308,7 +307,14 @@ public class Menu
             }
             else
             {
-                currentMachine.dispenseItem(tempItem, payment);
+                if (currentMachine.dispenseItem(tempItem, payment) == false)
+                {
+                    System.out.println("Dispensing your change: ");
+                    for (int denomination : denominations)
+                    {
+                        System.out.println("Dispensing " + denomination + " PHP...");
+                    }    
+                }
             }
                 
         }
@@ -322,7 +328,7 @@ public class Menu
     {
         int input = 0;
 
-        int tempItem = 0, tempStock = 0;
+        int tempItem = 0, tempStock = 0, tempPrice = 0;
 
         if (currentMachine == null)
         {
@@ -334,15 +340,17 @@ public class Menu
             displayDivider();
             System.out.println("Performing maintenance on newest machine created: " + currentMachine.getMachineName());   
 
-            while (input != 5)
+            while (input != 6)
             {
+                displayDivider();
                 System.out.println("What do you want to do?");
                 System.out.println();
                 System.out.println("[1] Restock Items");
                 System.out.println("[2] Restock Change");
-                System.out.println("[3] Print Transaction Summary");
-                System.out.println("[4] Collect Payment");
-                System.out.println("[5] Exit");
+                System.out.println("[3] Set Item Price");
+                System.out.println("[4] Print Transaction Summary");
+                System.out.println("[5] Collect Payment");
+                System.out.println("[6] Exit");
                 System.out.println();
                 System.out.print("Input: ");
 
@@ -374,28 +382,59 @@ public class Menu
                         break;
                     
                     case 3:
+                        System.out.println("Which item do you want to set the price for?");
+                        currentMachine.displayAllItems();
+                        System.out.println();
+                        System.out.print("Input: ");
+                        tempItem = scanner.nextInt();
+
+                        System.out.println("What price do you want to set the item to?");
+                        System.out.print("Input: ");
+                        tempPrice = scanner.nextInt();
+                        System.out.println();
+
+                        currentMachine.setItemPrice(tempItem, tempPrice);
+                        System.out.println("Item price successfully updated.");
+                        break;
+
+                    case 4:
                         int i = 0;
 
                         System.out.println("Starting Inventory since last restocking: ");
-                        for (Item item : currentMachine.getStartingInventory())
+                        for (String item : currentMachine.getStartingInventory())
                         {
-                            System.out.println("[" + i + "] " + item.getItemName() + " | " + item.getItemCalorie() + " Calorie(s) | Stock: " + item.getItemStock());
+                            System.out.println("[" + i + "]" + item);
                             i++;
                         }
+
+                        System.out.println();
 
                         System.out.println("Ending Inventory since last restocking: ");
                         currentMachine.displayAllItems();
 
+                        System.out.println();
+
+                        i = 0;
+
+                        System.out.println("Items sold since last restocking:");
+                        for (Item item : currentMachine.getItemsPurchased())
+                        {
+                            System.out.println(i + ") " + item.getItemName());
+                            i++;
+                        }
+
+                        System.out.println("Total amount collected from sales: ");
+                        System.out.println(currentMachine.getPaymentReserve());
                         break;
 
-                    case 4:
+                    case 5:
                         displayDivider();
                         int paymentsReceived = currentMachine.collectPayment();
 
-                        System.out.println(paymentsReceived + " amount collected from sales.");
+                        System.out.println(paymentsReceived + " PHP collected from sales.");
                         break;
 
-                    case 5: //exit
+                    case 6: //exit
                         break;
 
                     default:

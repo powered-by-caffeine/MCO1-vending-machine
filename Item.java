@@ -1,7 +1,6 @@
 public class Item {
     private String itemName;
     private int itemPrice;
-    
     private int itemStock;
     private int itemCalorie;
 
@@ -87,5 +86,13 @@ public class Item {
      */
     public void dispenseItem(){
         this.itemStock-=1;
+    }
+    
+    /**
+     * Sets the item's price
+     * @param itemPrice
+     */
+    public void setItemPrice(int itemPrice) {
+        this.itemPrice = itemPrice;
     }
 }

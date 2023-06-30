@@ -6,7 +6,9 @@ public class VendingMachine{
     private ArrayList<Item> items = new ArrayList<Item>();
     private int paymentReserve = 0;
 
-    private ArrayList<Item> startingInventory = new ArrayList<>();
+    private ArrayList<String> startingInventory = new ArrayList<>();
+
+    private ArrayList<Item> itemsPurchased = new ArrayList<>();
 
     
 
@@ -36,7 +38,10 @@ public class VendingMachine{
         items.add(Monster);
         items.add(RedBull);
 
-
+        for (Item item : items)
+        {
+            startingInventory.add(item.getItemName() + " | Stock: " + item.getItemStock());
+        }
         changeDispenser = new ChangeDispenser(10);
     }
 
@@ -99,7 +104,7 @@ public class VendingMachine{
     public void createItem(String itemName, int itemPrice, int itemCalorie){
         Item newItem = new Item(itemName, itemPrice, itemCalorie);
         items.add(newItem);
-        startingInventory.add(newItem);
+        startingInventory.add(newItem.getItemName() + " | Stock: " + newItem.getItemStock());
         System.out.println(SUCCESS_ITEM_ADD);
     }
 
@@ -113,7 +118,7 @@ public class VendingMachine{
     public void createItem(String itemName, int itemPrice, int itemCalorie, int itemStock){
         Item newItem = new Item(itemName, itemPrice, itemCalorie, itemStock);
         items.add(newItem);
-        startingInventory.add(newItem);
+        startingInventory.add(newItem.getItemName() + " | Stock: " + newItem.getItemStock());
         System.out.println(SUCCESS_ITEM_ADD);
     }
 
@@ -124,7 +129,7 @@ public class VendingMachine{
     public void createItem(Item newItem)
     {
         items.add(newItem);
-        startingInventory.add(newItem);
+        startingInventory.add(newItem.getItemName() + " | Stock: " + newItem.getItemStock());
         System.out.println(SUCCESS_ITEM_ADD);
     }
 
@@ -135,6 +140,15 @@ public class VendingMachine{
      */
     public void stockItem(int Index, int stockAmount){
         items.get(Index).stockItem(stockAmount);
+
+        for (String item : startingInventory) //updates the starting inventory entry containing the item that was recently restocked
+        {
+            if (item.contains(items.get(Index).getItemName()))
+            {
+                item = items.get(Index).getItemName() + " | Stock: " + items.get(Index).getItemStock();
+            }
+        }
+        resetItemsPurchased();
     }
 
     
@@ -156,18 +170,20 @@ public class VendingMachine{
      * @param index 
      * @param moneyAmount the payment received by the machine
      */
-    public void dispenseItem(int index, int moneyAmount){
+    public Boolean dispenseItem(int index, int moneyAmount){
         ArrayList<Denomination> change = new ArrayList<>();
 
         if (moneyAmount < items.get(index).getItemPrice()) //payment is less than the item price
         {
             System.out.println("Transaction failed.Payment received is less than the item price.");
+            return false;
         }
         else if (moneyAmount == items.get(index).getItemPrice()) //payment is equal to the item price
         {
             System.out.println("Dispensing " + items.get(index).getItemName() + "...");
             items.get(index).dispenseItem();
             System.out.println(items.get(index).getItemStock() + " stock remaining for item named: " + items.get(index).getItemName());
+            return true;
         }
         else //payment requires change
         {
@@ -176,6 +192,7 @@ public class VendingMachine{
             if (change.isEmpty()) //change is empty if change dispenser does not have enough change stock
             {
                 System.out.println("Transaction failed. Not enough change to dispense.");
+                return false;
             }
             else
             {
@@ -193,6 +210,7 @@ public class VendingMachine{
                 {
                     System.out.println("Dispensing " + denomination.getValue() + " PHP...");
                 }
+                return true;
             }
         }
     }
@@ -203,7 +221,7 @@ public class VendingMachine{
     public void displayAllItems(){
         int i = 0;
         while(i < this.items.size()){
-            System.out.println("[" + i + "] " + this.items.get(i).getItemName() + " | " + this.items.get(i).getItemCalorie() + " Calorie(s)");
+            System.out.println("[" + i + "] " + this.items.get(i).getItemName() + " | " + this.items.get(i).getItemCalorie() + " Calorie(s) | Price: " + this.items.get(i).getItemPrice() + " PHP");
             System.out.println(this.items.get(i).getItemStock() + " piece(s) left.");
             i++;
         }
@@ -233,7 +251,7 @@ public class VendingMachine{
 
     /**
      * gets the payments received by the machine
-     * @return
+     * @return the payments collected so far
      */
     public int getPaymentReserve() {
         return paymentReserve;
@@ -242,15 +260,53 @@ public class VendingMachine{
     /**
      * gets the starting inventory since last reset
      */
-    public ArrayList<Item> getStartingInventory() {
+    public ArrayList<String> getStartingInventory() {
         return startingInventory;
     }
 
+    /**
+     * updates the starting inventory
+     */
     public void updateStartingInventory(Item newItem) {
-        startingInventory.add(newItem);
+        startingInventory.add(newItem.getItemName() + " | Stock: " + newItem);;
     }
 
+    /**
+     * resets the starting inventory
+     */
     public void resetStartingInventory() {
         startingInventory.clear();
+    }
+    
+    
+    /**
+     * gets the items purchased from the machine since last reset
+     * @return
+     */
+    public ArrayList<Item> getItemsPurchased() {
+        return itemsPurchased;
+    }
+
+    /**
+     * adds to the list of items purchased since last reset
+     */
+    public void updateItemsPurchased(Item newItem) {
+        itemsPurchased.add(newItem);
+    }
+
+    /**
+     * resets the items purchased
+     */
+    public void resetItemsPurchased() {
+        itemsPurchased.clear();
+    }
+
+    /**
+     * sets an item's price
+     * @param index the index of the item to be updated
+     * @param newPrice the item's new price
+     */
+    public void setItemPrice(int index, int newPrice) {
+        items.get(index).setItemPrice(newPrice);
     }
 }
