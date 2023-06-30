@@ -4,6 +4,12 @@ public class Item {
     private int itemStock;
     private int itemCalorie;
 
+    final int MIN_ITEMS = 8;
+    final int MIN_ITEM_STOCK = 10;
+
+    final int MAX_ITEMS = 10;
+    final int MAX_ITEM_STOCK = 15;
+
     /** 
      * Constructor for Items, overloaded so that one requires stock and the other does not
      */
@@ -28,14 +34,19 @@ public class Item {
      * @param stock adds to the stock of the item
      * @return either true when item is succesfuly stocked and false when not
      */
-    public boolean StockItem(int stock){
-        if(itemStock + stock < 10){
+    public boolean stockItem(int stock){
+        if(itemStock + stock < MIN_ITEM_STOCK){
             System.out.println("Item Stock is below minimum, please add more stock.");
             return false;
         }
+        else if(itemStock + stock > MAX_ITEM_STOCK){
+            System.out.println("Item Stock is above the item limit, please reduce the stock.");
+            return false;
+        }
+
+
         itemStock += stock;
         return true;
-
     }
 
     /**

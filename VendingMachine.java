@@ -6,6 +6,11 @@ public class VendingMachine{
     private ChangeDispenser change;
     private ArrayList<Item> items = new ArrayList<Item>();
 
+<<<<<<< Updated upstream
+=======
+    final String SUCCESS_ITEM_ADD = "Item added successfully.";
+
+>>>>>>> Stashed changes
     /**
      * Constructor for the Vending Machine
      * @param machineName This names the machine
@@ -50,7 +55,9 @@ public class VendingMachine{
         Item newItem = new Item(tempName, tempPrice, tempCalorie, tempStock);
         
         items.add(newItem);
-        System.out.println("Successfully made an Item.");
+        System.out.println(SUCCESS_ITEM_ADD);
+
+        input.close();
     }
 
     /**
@@ -62,7 +69,7 @@ public class VendingMachine{
     public void createItem(String itemName, int itemPrice, int itemCalorie){
         Item newItem = new Item(itemName, itemPrice, itemCalorie);
         items.add(newItem);
-        System.out.println("Succesfully made an Item.");
+        System.out.println(SUCCESS_ITEM_ADD);
     }
 
     /**
@@ -75,7 +82,17 @@ public class VendingMachine{
     public void createItem(String itemName, int itemPrice, int itemCalorie, int itemStock){
         Item newItem = new Item(itemName, itemPrice, itemCalorie, itemStock);
         items.add(newItem);
-        System.out.println("Succesfully made an Item.");
+        System.out.println(SUCCESS_ITEM_ADD);
+    }
+
+    /**
+     * Used to add an existing item into the machine. Primarily used for adding presets
+     * @param newItem an already existing item to be added into the list of items the machine currently holds
+     */
+    public void createItem(Item newItem)
+    {
+        items.add(newItem);
+        System.out.println(SUCCESS_ITEM_ADD);
     }
 
     /**
@@ -84,7 +101,7 @@ public class VendingMachine{
      * @param stockAmount the amount of stock to be added to the item 
      */
     public void stockItem(int Index, int stockAmount){
-        items.get(Index).StockItem(stockAmount);
+        items.get(Index).stockItem(stockAmount);
     }
 
     public void stockChange(){
