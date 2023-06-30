@@ -6,6 +6,8 @@ public class VendingMachine{
     private ChangeDispenser change;
     private ArrayList<Item> items = new ArrayList<Item>();
 
+    
+
     /**
      * Constructor for the Vending Machine
      * @param machineName This names the machine
@@ -42,7 +44,7 @@ public class VendingMachine{
         while(tempStock < 10){
             System.out.println("Please enter Item stock: ");
             tempStock = input.nextInt();
-            if(tempStock < 8){
+            if(tempStock < 10){
                 System.out.println("Item Stock is below minimum, please add more stock.");
             }
         }
@@ -98,6 +100,11 @@ public class VendingMachine{
     public int getItemAmount(){
         return items.size();
     }
+    
+    public ArrayList<Item> getItems(){
+        return items;
+    }
+
     /**
      * Used to dispense the item.
      * @param index Requires index to locate the proper item
@@ -117,10 +124,17 @@ public class VendingMachine{
      */
     public void displayAllItems(){
         int i = 0;
-        while(i < this.items.size()){
-            System.out.println("[" + i + "] " + this.items.get(i).getItemName() + " | " + this.items.get(i).getItemCalorie() + " Calorie(s)");
-            System.out.println(this.items.get(i).getItemStock() + " piece(s) left.");
-            i++;
+        if (items.size() == 0)
+        {
+            System.out.println("No items to display.");
+        }
+        else
+        {
+            while(i < this.items.size()){
+                System.out.println("[" + i + "] " + this.items.get(i).getItemName() + " | " + this.items.get(i).getItemCalorie() + " Calorie(s)");
+                System.out.println(this.items.get(i).getItemStock() + " piece(s) left.");
+                i++;
+            }
         }
     }
 
