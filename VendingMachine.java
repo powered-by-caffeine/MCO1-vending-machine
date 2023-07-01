@@ -10,8 +10,6 @@ public class VendingMachine{
 
     private ArrayList<Item> itemsPurchased = new ArrayList<>();
 
-    
-
     final String SUCCESS_ITEM_ADD = "Item added successfully.";
 
     /**
@@ -48,7 +46,7 @@ public class VendingMachine{
 
     /**
      * Constructor for the Vending Machine. The change dispenser for the vending machine has to be manually stocked
-     * @param machineName This names the machine
+     * @param machineName name of the vending machine
      */
     public VendingMachine(String machineName){
         this.machineName = machineName;
@@ -56,7 +54,7 @@ public class VendingMachine{
     }
 
     /**
-     * Returns the machine name
+     * Gets the machine name
      * @return the name of the vending machine
      */
     public String getMachineName() {
@@ -150,8 +148,9 @@ public class VendingMachine{
         resetItemsPurchased();
     }
 
-    
-
+    /**
+     * Stocks the machine's change dispenser
+     */
     public void stockChange(){
         changeDispenser.StockChange();
     }
@@ -196,12 +195,15 @@ public class VendingMachine{
             else
             {
                 //Collect payment
-                addPayment(moneyAmount - items.get(index).getItemPrice());
+                addPayment(items.get(index).getItemPrice());
 
                 // Dispense Item
                 System.out.println("Dispensing " + items.get(index).getItemName() + "...");
                 items.get(index).dispenseItem();
                 System.out.println(items.get(index).getItemStock() + " stock remaining for item named: " + items.get(index).getItemName());
+
+                // Add item to list of purchased items
+                itemsPurchased.add(items.get(index));
 
                 // Dispense change
                 System.out.println("Dispensing change:");

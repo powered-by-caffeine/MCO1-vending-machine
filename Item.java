@@ -10,8 +10,12 @@ public class Item {
     final int MAX_ITEMS = 10;
     final int MAX_ITEM_STOCK = 15;
 
-    /** 
-     * Constructor for Items, overloaded so that one requires stock and the other does not
+    /**
+     * Constructs an item with a name, price, calorie amount, and stock amount
+     * @param itemName the item's name
+     * @param itemPrice the item's price
+     * @param itemCalorie the item's calorie amount
+     * @param itemStock the item's stock amount
      */
     public Item(String itemName, int itemPrice, int itemCalorie, int itemStock){
         this.itemName = itemName;
@@ -19,8 +23,12 @@ public class Item {
         this.itemCalorie = itemCalorie;
         this.itemStock = itemStock;
     }
-    /** 
-     * Constructor for Items, overloaded so that one requires stock and the other does not
+    
+    /**
+     * Constructs an item with a name, price, and calorie amount
+     * @param itemName the item's name
+     * @param itemPrice the item's price
+     * @param itemCalorie the item's calorie amount
      */
     public Item(String itemName, int itemPrice, int itemCalorie){
         this.itemName = itemName;
@@ -32,7 +40,7 @@ public class Item {
     /**
      * Used to stock the item
      * @param stock adds to the stock of the item
-     * @return either true when item is succesfuly stocked and false when not
+     * @return TRUE when the item is successfully stocked, FALSE otherwise
      */
     public boolean stockItem(int stock){
         if(itemStock + stock < MIN_ITEM_STOCK){

@@ -16,9 +16,9 @@ public class Menu
 
     final int DIVIDER_LENGTH = 50;
 
-    VendingMachine currentMachine;
+    private VendingMachine currentMachine;
 
-    Scanner scanner = new Scanner(System.in);
+    private Scanner scanner = new Scanner(System.in);
 
     /**
      * Displays a divider for better readability in terminal
@@ -286,21 +286,27 @@ public class Menu
                 switch (input)
                 {
                     case 1:
+                        denominations.clear();
+                        payment = 0;
                         // Accept Payment in denominations
                         while(true)
                         {
+                            
+
                             displayDivider();
                             System.out.println("Keep entering the denominations you wish to insert into the machine. Enter 0 to finish entering denominations.");
                             System.out.print("Input: ");
                             tempMoney = scanner.nextInt();   
                             
-                            if (tempMoney == 5 || tempMoney == 10 || tempMoney == 20 || tempMoney == 50 || tempMoney == 100 || tempMoney == 500)
+                            if (tempMoney == 1 || tempMoney == 5 || tempMoney == 10 || tempMoney == 20 || tempMoney == 50 || tempMoney == 100 || tempMoney == 500)
                             {
                                 denominations.add(tempMoney); //for keeping track of what user inserted in case they cancel purchase
                                 payment += tempMoney;
                             }
                             else if (tempMoney == 0)
                             {
+                                displayDivider();
+                                System.out.println("Payment: " + payment);
                                 break;
                             }
                             else
@@ -326,7 +332,7 @@ public class Menu
                         }
                         else
                         {
-                            if (currentMachine.dispenseItem(tempItem, payment) == false)
+                            if (currentMachine.dispenseItem(tempItem, payment) == false) //Transaction failed
                             {
                                 System.out.println("Dispensing your change: ");
                                 for (int denomination : denominations)
@@ -449,7 +455,7 @@ public class Menu
 
                         System.out.println();
 
-                        i = 0;
+                        i = 1;
 
                         System.out.println("Items sold since last restocking:");
                         for (Item item : currentMachine.getItemsPurchased())
@@ -482,6 +488,9 @@ public class Menu
 
     }
 
+    /**
+     * Lets the user interact with the main menu of the program
+     */
     public void mainMenu()
     {
         int input;

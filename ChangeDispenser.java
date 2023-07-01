@@ -11,6 +11,10 @@ public class ChangeDispenser
     private Denomination oneHundredPHP;
     private Denomination fiveHundredPHP;
     
+    /**
+     * constructs a change dispenser where each denomination is stocked with a common amount
+     * @param commonStock the common amount stacked to all denominations supported by the change dispenser
+     */
     public ChangeDispenser(int commonStock)
     {
         onePHP = new Denomination(1, commonStock);
@@ -22,6 +26,16 @@ public class ChangeDispenser
         fiveHundredPHP = new Denomination (500, commonStock);
     }
 
+    /**
+     * constructs a change dispenser where each denomination is stocked with a specified amount
+     * @param onePHPStock the stock for denomination of 1 PHP
+     * @param fivePHPStock the stock for denomination of 5 PHP
+     * @param tenPHPStock the stock for denomination of 10 PHP
+     * @param twentyPHPStock the stock for denomination of 20 PHP
+     * @param fiftyPHPStock the stock for denomination of 50 PHP
+     * @param oneHundredPHPStock the stock for denomination of 100 PHP
+     * @param fiveHundredPHPStock the stock for denomination of 500 PHP
+     */
     public ChangeDispenser (int onePHPStock, int fivePHPStock, int tenPHPStock, int twentyPHPStock, int fiftyPHPStock, int oneHundredPHPStock, int fiveHundredPHPStock)
     {
         onePHP = new Denomination(1, onePHPStock);
@@ -54,6 +68,8 @@ public class ChangeDispenser
             fivePHP,
             onePHP
         };
+
+        change.clear();
 
         for (Denomination denomination : denominations)
         {
@@ -88,77 +104,87 @@ public class ChangeDispenser
         return change;
     }
     
+    /**
+     * stocks a specified denomination
+     *
+     */
     public void StockChange(){
-        boolean done = false;
         int menu = 0;
         int stockNumber;
         Scanner scanner = new Scanner(System.in);
 
+        Denomination[] denominations = 
+        {
+            fiveHundredPHP,
+            oneHundredPHP,
+            fiftyPHP,
+            twentyPHP,
+            tenPHP,
+            fivePHP,
+            onePHP
+        };
+
+        System.out.println("What do you want to restock?");
+        System.out.println("[1] 1 Peso");
+        System.out.println("[2] 5 Peso");
+        System.out.println("[3] 10 Peso");
+        System.out.println("[4] 20 Peso");
+        System.out.println("[5] 50 Peso");
+        System.out.println("[6] 100 Peso");
+        System.out.println("[7] 500 Peso");
+        System.out.println("[8] Exit");
+        System.out.println();
+        System.out.print("Input: ");
+        menu = scanner.nextInt();
+
+        System.out.println("How much stock do you want to add? If you chose exit, enter 0: ");
+        stockNumber = scanner.nextInt();  
+
         
-        while(!done){
-            System.out.println("What do you want to restock?");
-            System.out.println("[1] 1 Peso");
-            System.out.println("[2] 5 Peso");
-            System.out.println("[3] 10 Peso");
-            System.out.println("[4] 20 Peso");
-            System.out.println("[5] 50 Peso");
-            System.out.println("[6] 100 Peso");
-            System.out.println("[7] 500 Peso");
-            System.out.println("[8] Exit");
-            menu = scanner.nextInt();
-            switch(menu){
-                case 1:
-                System.out.println("How many do you want to add.");
-                stockNumber = scanner.nextInt();
+
+        switch(menu){
+            case 1:
                 this.onePHP.addStock(stockNumber);
                 break;
 
-                case 2:
-                System.out.println("How many do you want to add.");
-                stockNumber = scanner.nextInt();
+            case 2:
                 this.fivePHP.addStock(stockNumber);
                 break;
 
-                case 3:
-                System.out.println("How many do you want to add.");
-                stockNumber = scanner.nextInt();
+            case 3:
                 this.tenPHP.addStock(stockNumber);
                 break;
 
-                case 4:
-                System.out.println("How many do you want to add.");
-                stockNumber = scanner.nextInt();
+            case 4:
                 this.twentyPHP.addStock(stockNumber);
                 break;
 
-                case 5:
-                System.out.println("How many do you want to add.");
-                stockNumber = scanner.nextInt();
+            case 5:
                 this.fiftyPHP.addStock(stockNumber);
                 break;
 
-                case 6:
-                System.out.println("How many do you want to add.");
-                stockNumber = scanner.nextInt();
+            case 6:
                 this.oneHundredPHP.addStock(stockNumber);
                 break;
 
-                case 7:
-                System.out.println("How many do you want to add.");
-                stockNumber = scanner.nextInt();
+            case 7:
                 this.fiveHundredPHP.addStock(stockNumber);
                 break;
 
-                case 8:
-                done = true;
+            case 8:
                 break;
 
-                default:
-                System.out.println("Invalid input. Please try again.");   
-                break;
-            }
+            default:
+            System.out.println("Invalid input. Please try again.");   
+            break;
+        } 
+        
+        for (Denomination denomination : denominations)
+        {
+            System.out.println(denomination.getValue() + " PHP : " + denomination.getStock());
         }
-
-        scanner.close();
     }
+
+   
+    
 }
